@@ -14,22 +14,19 @@ import kotlin.reflect.KClass
 import kotlin.reflect.KFunction
 import kotlin.reflect.jvm.javaType
 
-fun interactionFunctionToCommonInteraction(func: KFunction<*>, events: Set<KClass<*>>): InteractionDescriptor {
-    val inputIngredients = func.parameters.drop(1)
+fun interactionFunctionToCommonInteraction(builder: InteractionBuilder): InteractionDescriptor {
+    val inputIngredients = builder.func.parameters.drop(1)
         .map {
             val type = Converters.readJavaType(it.type.javaType)
             Ingredient(it.name, type)
         }
-    val owner = (func as CallableReference).owner
-    val name = (owner as KClass<*>).simpleName
-
 
 
     return InteractionDescriptor(
-        name,
+        builder.func.ownerClass().simpleName,
         inputIngredients.toScalaSeq(),
-        events.map { Event(it.java, Option.empty()) }.toScalaSeq(),
-        listOf<String>().toScalaSet(),
+        builder.events.map { Event(it.java, Option.empty()) }.toScalaSeq(),
+        builder.requiredEvents.map { it.java.simpleName }.toScalaSet(),
         setOf<scala.collection.immutable.Set<String>>().toScalaSet(),
         mapOf<String, Value>().toScalaMap(),
         mapOf<String, String>().toScalaMap(),
@@ -41,20 +38,33 @@ fun interactionFunctionToCommonInteraction(func: KFunction<*>, events: Set<KClas
     )
 }
 
-fun interaction(init: InteractionBuilder.() -> Unit): InteractionDescriptor {
+fun convertRecipe(builder: RecipeBuilder):Recipe{
+    return Recipe(builder.name)
+        .withInteractions(builder.interactions.map(::interactionFunctionToCommonInteraction).toScalaSeq())
+        .withSensoryEvents(builder.sensoryEvents.map { it.java }.toScalaSeq())
+
+}
+
+fun KFunction<*>.ownerClass(): KClass<*> {
+    val owner = (this as CallableReference).owner
+    return (owner as KClass<*>)
+}
+
+fun interaction(init: InteractionBuilder.() -> Unit): InteractionBuilder {
     val builder = InteractionBuilder()
     builder.apply(init)
-    return interactionFunctionToCommonInteraction(builder.func, builder.events)
+    return builder
 }
 
 class InteractionBuilder {
 
     lateinit var func: KFunction<*>
-    lateinit var events: Set<KClass<*>>
+    var events: Set<KClass<*>> = setOf()
+    var requiredEvents: Set<KClass<*>> = setOf()
 
     fun func(func: KFunction<*>) {
         val sealedSubclasses = (func.returnType.classifier as KClass<*>).sealedSubclasses
-        if(sealedSubclasses.isNotEmpty()){
+        if (sealedSubclasses.isNotEmpty()) {
             this.events = sealedSubclasses.toSet()
         }
         this.func = func
@@ -63,25 +73,26 @@ class InteractionBuilder {
     fun events(vararg events: KClass<*>) {
         this.events = events.toSet()
     }
+
+    fun requiredEvents(vararg requiredEvents: KClass<*>) {
+        this.requiredEvents = requiredEvents.toSet()
+    }
 }
 
 
-fun recipe(init: RecipeBuilder.() -> Unit): Recipe {
+fun recipe(init: RecipeBuilder.() -> Unit): RecipeBuilder {
     val builder = RecipeBuilder()
     builder.apply(init)
-    val recipe = Recipe(builder.name)
-        .withInteractions(builder.interactions.toScalaSeq())
-        .withSensoryEvents(builder.sensoryEvents.map { it.java }.toScalaSeq())
-    return recipe
+    return builder
 }
 
 class RecipeBuilder {
 
     lateinit var name: String
-    lateinit var interactions: Set<InteractionDescriptor>
+    lateinit var interactions: Set<InteractionBuilder>
     lateinit var sensoryEvents: Set<KClass<*>>
 
-    fun interactions(vararg interactions: InteractionDescriptor) {
+    fun interactions(vararg interactions: InteractionBuilder) {
         this.interactions = interactions.toSet()
     }
 

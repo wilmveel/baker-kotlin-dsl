@@ -28,7 +28,10 @@ object Recipe {
                 events(
                     Interactions.ShipItems.ShippingConfirmed::class
                 )
-            }.withRequiredEvent(Interactions.MakePayment.PaymentSuccessful::class.java)
+                requiredEvents(
+                    Interactions.MakePayment.PaymentSuccessful::class
+                )
+            }
         )
         sensoryEvents(
             Events.OrderPlaced::class,

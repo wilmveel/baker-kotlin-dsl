@@ -9,7 +9,7 @@ object ScalaExtensions {
         JavaConverters.asScalaIteratorConverter(this.iterator()).asScala().toSeq()
 
     fun <A> Iterable<A>.toScalaSet(): scala.collection.immutable.Set<A> =
-        JavaConverters.asScalaIteratorConverter(this.iterator()).asScala().toSet<A>()
+        JavaConverters.asScalaIteratorConverter(this.iterator()).asScala().toSet()
 
     fun <K, V> Map<K, V>.toScalaMap(): scala.collection.immutable.Map<K, V> =
         scala.collection.immutable.Map.from(JavaConverters.asScala(this))
