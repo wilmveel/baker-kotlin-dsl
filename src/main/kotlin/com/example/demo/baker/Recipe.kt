@@ -8,11 +8,13 @@ object Recipe {
         name = "WebshopRecipe"
         interactions(
             interaction {
-                func = Interactions.MakePayment::apply
-                events(
-                    Interactions.MakePayment.PaymentSuccessful::class,
-                    Interactions.MakePayment.PaymentFailed::class,
+                func (
+                    Interactions.MakePayment::apply
                 )
+//                events(
+//                    Interactions.MakePayment.PaymentSuccessful::class,
+//                    Interactions.MakePayment.PaymentFailed::class,
+//                )
             },
             interaction {
                 func = Interactions.ReserveItems::apply

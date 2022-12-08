@@ -52,6 +52,14 @@ class InteractionBuilder {
     lateinit var func: KFunction<*>
     lateinit var events: Set<KClass<*>>
 
+    fun func(func: KFunction<*>) {
+        val sealedSubclasses = (func.returnType.classifier as KClass<*>).sealedSubclasses
+        if(sealedSubclasses.isNotEmpty()){
+            this.events = sealedSubclasses.toSet()
+        }
+        this.func = func
+    }
+
     fun events(vararg events: KClass<*>) {
         this.events = events.toSet()
     }
