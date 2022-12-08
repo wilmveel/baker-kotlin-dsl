@@ -25,7 +25,7 @@ object Interactions {
     }
 
     interface ReserveItems : Interaction {
-        interface ReserveItemsOutcome
+        sealed interface ReserveItemsOutcome
         class OrderHadUnavailableItems(val unavailableItems: List<Ingredients.Item>) : ReserveItemsOutcome
         class ItemsReserved(val reservedItems: Ingredients.ReservedItems) : ReserveItemsOutcome
 

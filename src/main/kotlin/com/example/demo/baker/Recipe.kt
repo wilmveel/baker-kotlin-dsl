@@ -17,17 +17,21 @@ object Recipe {
 //                )
             },
             interaction {
-                func = Interactions.ReserveItems::apply
-                events(
-                    Interactions.ReserveItems.OrderHadUnavailableItems::class,
-                    Interactions.ReserveItems.ItemsReserved::class
+                func(
+                    Interactions.ReserveItems::apply
                 )
+//                events(
+//                    Interactions.ReserveItems.OrderHadUnavailableItems::class,
+//                    Interactions.ReserveItems.ItemsReserved::class
+//                )
             },
             interaction {
-                func = Interactions.ShipItems::apply
-                events(
-                    Interactions.ShipItems.ShippingConfirmed::class
+                func(
+                    Interactions.ShipItems::apply
                 )
+//                events(
+//                    Interactions.ShipItems.ShippingConfirmed::class
+//                )
                 requiredEvents(
                     Interactions.MakePayment.PaymentSuccessful::class
                 )

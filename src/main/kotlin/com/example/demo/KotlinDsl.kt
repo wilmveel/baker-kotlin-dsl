@@ -21,7 +21,6 @@ fun interactionFunctionToCommonInteraction(builder: InteractionBuilder): Interac
             Ingredient(it.name, type)
         }
 
-
     return InteractionDescriptor(
         builder.func.ownerClass().simpleName,
         inputIngredients.toScalaSeq(),
@@ -66,7 +65,10 @@ class InteractionBuilder {
         val sealedSubclasses = (func.returnType.classifier as KClass<*>).sealedSubclasses
         if (sealedSubclasses.isNotEmpty()) {
             this.events = sealedSubclasses.toSet()
+        } else {
+            this.events = setOf(func.returnType.classifier as KClass<*>)
         }
+
         this.func = func
     }
 
