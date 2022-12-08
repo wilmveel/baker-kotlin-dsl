@@ -2,8 +2,6 @@ package com.example.demo.baker
 
 import com.ing.baker.recipe.javadsl.Interaction
 
-import java.util.*
-
 object Interactions {
 
     interface MakePayment : Interaction {

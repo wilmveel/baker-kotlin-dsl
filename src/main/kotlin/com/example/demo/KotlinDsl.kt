@@ -38,7 +38,7 @@ fun interactionFunctionToCommonInteraction(builder: InteractionBuilder): Interac
     )
 }
 
-fun convertRecipe(builder: RecipeBuilder):Recipe{
+fun convertRecipe(builder: RecipeBuilder): Recipe {
     return Recipe(builder.name)
         .withInteractions(builder.interactions.map(::interactionFunctionToCommonInteraction).toScalaSeq())
         .withSensoryEvents(builder.sensoryEvents.map { it.java }.toScalaSeq())

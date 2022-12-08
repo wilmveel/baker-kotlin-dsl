@@ -5,7 +5,7 @@ import com.example.demo.baker.Interactions
 import org.springframework.stereotype.Service
 
 @Service
-class ShipItemsLive: Interactions.ShipItems {
+class ShipItemsLive : Interactions.ShipItems {
     override fun apply(
         shippingAddress: Ingredients.ShippingAddress,
         reservedItems: Ingredients.ReservedItems

@@ -6,7 +6,7 @@ import com.example.demo.repository.PaymentRepository
 import org.springframework.stereotype.Service
 
 @Service
-class MakePaymentLive(val paymentRepository: PaymentRepository): Interactions.MakePayment {
+class MakePaymentLive(val paymentRepository: PaymentRepository) : Interactions.MakePayment {
     override fun apply(
         reservedItems: Ingredients.ReservedItems,
         paymentInformation: Ingredients.PaymentInformation

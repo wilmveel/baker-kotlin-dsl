@@ -8,7 +8,7 @@ object Recipe {
         name = "WebshopRecipe"
         interactions(
             interaction {
-                func (
+                func(
                     Interactions.MakePayment::apply
                 )
 //                events(
