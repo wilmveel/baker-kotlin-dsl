@@ -10,6 +10,7 @@ class ShipItemsLive : Interactions.ShipItems {
         shippingAddress: Ingredients.ShippingAddress,
         reservedItems: Ingredients.ReservedItems
     ): Interactions.ShipItems.ShippingConfirmed {
+        println("-- Ship items ${reservedItems.date} ---")
         return Interactions.ShipItems.ShippingConfirmed()
     }
 }
