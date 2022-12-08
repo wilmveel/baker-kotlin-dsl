@@ -30,7 +30,9 @@ class Baker(
         }
 
     suspend fun orderPlaced(instanceId: UUID) {
-        baker.bake(compiled.recipeId(), instanceId.toString()).await()
+        baker
+            .bake(compiled.recipeId(), instanceId.toString())
+            .await()
         baker
             .fireEventAndResolveWhenCompleted(
                 instanceId.toString(),
@@ -43,15 +45,10 @@ class Baker(
                     )
                 )
             )
-            .thenApply {
-                println(it.ingredients)
-                println(it.eventNames)
-            }
             .await()
     }
 
-    suspend fun shippingAddressReceived(instanceId: UUID) {
-        baker
+    suspend fun shippingAddressReceived(instanceId: UUID) = baker
             .fireEventAndResolveWhenCompleted(
                 instanceId.toString(),
                 EventInstance.from(
@@ -62,15 +59,10 @@ class Baker(
                     )
                 )
             )
-            .thenApply {
-                println(it.ingredients)
-                println(it.eventNames)
-            }
             .await()
-    }
 
-    suspend fun paymentInformationReceived(instanceId: UUID) {
-        baker
+
+    suspend fun paymentInformationReceived(instanceId: UUID) = baker
             .fireEventAndResolveWhenCompleted(
                 instanceId.toString(),
                 EventInstance.from(
@@ -82,5 +74,5 @@ class Baker(
                 )
             )
             .await()
-    }
+
 }
